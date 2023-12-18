@@ -46,7 +46,7 @@ if __name__ == "__main__":
                   ModelCheckpoint('./backup_model_best.hdf5', save_best_only=True)]
     # Train neural network
     history = model.fit(train_seq,
-                        epochs=70,
+                        epochs=50,
                         initial_epoch=0,  # If you are continuing a interrupted section change here
                         callbacks=callbacks,
                         validation_data=valid_seq,
