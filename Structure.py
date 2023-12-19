@@ -12,14 +12,11 @@ def plot_first_batch(train_seq):
     # Print values of the first batch
     batch_idx = 0
     batch_x, batch_y = train_seq[batch_idx]
-    reshaped_data = batch_x[0, :, 0]  # Taking the first feature from each timestep
-
-    # Plot the reshaped data
-    plt.plot(reshaped_data)
-    plt.title('ECG Signal')
-    plt.xlabel('Time step')
-    plt.ylabel('Amplitude')
-    plt.show()
+    reshaped_data = batch_x[0,:,]  # Taking the first feature from each timestep
+    print(f"Shape of reshaped data: {reshaped_data.shape}")
+    for i in range(reshaped_data.shape[1]):
+        plt.plot(reshaped_data[:, i], label=f'Original Lead {i + 1}')
+        plt.show()
 
     print(f"Batch {batch_idx + 1} - Input Values:\n{batch_x}")
     print(f"Batch {batch_idx + 1} - Label Values:\n{batch_y}")
