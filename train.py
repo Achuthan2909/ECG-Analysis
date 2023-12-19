@@ -1,5 +1,5 @@
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.callbacks import (ModelCheckpoint, TensorBoard, ReduceLROnPlateau,
+from keras.optimizers import Adam
+from keras.callbacks import (ModelCheckpoint, TensorBoard, ReduceLROnPlateau,
                                         CSVLogger, EarlyStopping)
 from model import get_model
 import argparse
