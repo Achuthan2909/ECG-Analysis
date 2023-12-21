@@ -130,11 +130,11 @@ def get_model(n_classes, last_layer='sigmoid'):
     x, _ = ResidualUnit(16, 320, kernel_size=kernel_size,
                         kernel_initializer=kernel_initializer)([x, y])
     x = Flatten()(x)
-    diagn = Dense(n_classes, activation=last_layer, kernel_initializer=kernel_initializer)(x)
+    diagn = Dense(1, activation='sigmoid', kernel_initializer=kernel_initializer)(x)
     model = Model(signal, diagn)
     return model
 
 
 if __name__ == "__main__":
-    model = get_model(6)
+    model = get_model(1)
     model.summary()

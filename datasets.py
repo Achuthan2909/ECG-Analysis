@@ -4,10 +4,9 @@ import pandas as pd
 from keras.utils import Sequence
 import numpy as np
 
-
 class ECGSequence(Sequence):
     @classmethod
-    def get_train_and_val(cls, path_to_hdf5, hdf5_dset, path_to_csv, batch_size=8, val_split=0.02):
+    def get_train_and_val(cls, path_to_hdf5, hdf5_dset, path_to_csv=None, batch_size=8, val_split=0.02):
         n_samples = len(pd.read_csv(path_to_csv))
         n_train = math.ceil(n_samples*(1-val_split))
         train_seq = cls(path_to_hdf5, hdf5_dset, path_to_csv, batch_size, end_idx=n_train)
@@ -36,10 +35,15 @@ class ECGSequence(Sequence):
     def __getitem__(self, idx):
         start = self.start_idx + idx * self.batch_size
         end = min(start + self.batch_size, self.end_idx)
+        
         if self.y is None:
             return np.array(self.x[start:end, :, :])
         else:
-            return np.array(self.x[start:end, :, :]), np.array(self.y[start:end])
+            # Use the values of the first column of batch_y as target values for batch_x
+            batch_x = np.array(self.x[start:end, :, :])
+            batch_y = np.array(self.y[start:end])
+            corrected_data = batch_y[:, 0]
+            return batch_x, corrected_data
 
     def __len__(self):
         return math.ceil((self.end_idx - self.start_idx) / self.batch_size)
