@@ -6,12 +6,14 @@ import numpy as np
 
 class ECGSequence(Sequence):
     @classmethod
-    def get_train_and_val(cls, path_to_hdf5, hdf5_dset, path_to_csv=None, batch_size=8, val_split=0.02):
+    def get_train_val(cls, path_to_hdf5, hdf5_dset, path_to_csv=None, batch_size=8, val_split=0.2):
         n_samples = len(pd.read_csv(path_to_csv))
-        n_train = math.ceil(n_samples*(1-val_split))
+        n_train = math.ceil(n_samples * (1 - val_split))
+        
         train_seq = cls(path_to_hdf5, hdf5_dset, path_to_csv, batch_size, end_idx=n_train)
-        valid_seq = cls(path_to_hdf5, hdf5_dset, path_to_csv, batch_size, start_idx=n_train)
-        return train_seq, valid_seq
+        val_seq = cls(path_to_hdf5, hdf5_dset, path_to_csv, batch_size, start_idx=n_train)
+        
+        return train_seq, val_seq
 
     def __init__(self, path_to_hdf5, hdf5_dset, path_to_csv=None, batch_size=8,
                  start_idx=0, end_idx=None):

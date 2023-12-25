@@ -1,7 +1,7 @@
 from keras.optimizers import Adam
 from keras.callbacks import (ModelCheckpoint, TensorBoard, ReduceLROnPlateau,
                              CSVLogger, EarlyStopping)
-from model import get_model
+from Model1 import get_model
 import argparse
 from datasets import ECGSequence
 import numpy as np
