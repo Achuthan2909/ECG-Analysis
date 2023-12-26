@@ -27,7 +27,7 @@ if __name__ == '__main__':
     seq = ECGSequence(args.path_to_hdf5, args.dataset_name, batch_size=args.bs)
     
     # Import model2 (assuming model2 is in the same format as the original model)
-    model2 = load_model('path_to_model2.hdf5', compile=False)
+    model2 = load_model(args.path_to_model, compile=False)
     model2.compile(loss='binary_crossentropy', optimizer=Adam())
     
     # Generate predictions using model2
@@ -37,3 +37,4 @@ if __name__ == '__main__':
     np.save(args.output_file.replace(".npy", "_model2.npy"), y_score_model2)
 
     print("Output predictions for model2 saved")
+
