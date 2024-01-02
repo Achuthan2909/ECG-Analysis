@@ -1,36 +1,24 @@
-from keras.optimizers import Adam
-from keras.callbacks import (ModelCheckpoint, TensorBoard, ReduceLROnPlateau,
-                             CSVLogger, EarlyStopping)
-from Model1 import get_model
+
 import argparse
 from datasets import ECGSequence
 import numpy as np
-import pybaselines
+from noise_removal import NR
+# Continue with the modified import statement
+from Model1 import get_model
+
+# Continue with the remaining import statements and the rest of your script
+from keras.optimizers import Adam
+from keras.callbacks import (ModelCheckpoint, TensorBoard, ReduceLROnPlateau,
+                             CSVLogger, EarlyStopping)
 
 def load_data(path_to_hdf5, dataset_name, path_to_csv, val_split=0.2, batch_size=1):
-    train_seq, valid_seq = ECGSequence.get_train_and_val(
+    train_seq, valid_seq = ECGSequence.get_train_val(
         path_to_hdf5, dataset_name, path_to_csv, batch_size, val_split
     )
-
     # Apply ArPLS method to baseline correct the data
-    train_seq, valid_seq = baseline_correct_data(train_seq), baseline_correct_data(valid_seq)
-
+    train_seq, valid_seq = NR.baselinewander(train_seq), NR.baselinewander(valid_seq)
     return train_seq, valid_seq
 
-def baseline_correct_data(seq):
-    # Loop through batches and leads to apply ArPLS method
-    for batch_idx in range(len(seq)):
-        batch_x, batch_y = seq[batch_idx]
-        for j in range(batch_x.shape[0]):
-            reshaped_data = batch_x[j, :, :]
-            for i in range(reshaped_data.shape[1]):
-                noisy_data = np.array(reshaped_data[:, i])
-                baseline, param1 = pybaselines.whittaker.arpls(noisy_data)
-                corrected_data = np.array(noisy_data) - np.array(baseline)
-                reshaped_data[:, i] = corrected_data
-            # Update the batch data with corrected data
-            batch_x[j, :, :] = reshaped_data
-    return seq
 
 if __name__ == "__main__":
     # Get data and train
@@ -71,8 +59,8 @@ if __name__ == "__main__":
                   CSVLogger('training.log', append=False)]  # Change append to true if continuing training
 
     # Save the BEST and LAST model
-    callbacks += [ModelCheckpoint('./backup_model_last.hdf5'),
-                  ModelCheckpoint('./backup_model_best.hdf5', save_best_only=True)]
+    callbacks += [ModelCheckpoint('/home/achu/Desktop/Work/ECG-Analysis/BackUpModels/backup_model_last1.hdf5'),
+                  ModelCheckpoint('/home/achu/Desktop/Work/ECG-Analysis/BackUpModels/backup_model_best1.hdf5', save_best_only=True)]
 
     # Train neural network
     history = model.fit(train_seq,
@@ -83,4 +71,4 @@ if __name__ == "__main__":
                         verbose=1)
 
     # Save final result
-    model.save("./final_model1.hdf5")
+    model.save("/home/achu/Desktop/Work/ECG-Analysis/FinalModels/final_model1.hdf5")
