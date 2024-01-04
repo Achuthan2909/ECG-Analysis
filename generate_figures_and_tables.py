@@ -3,13 +3,13 @@ import numpy as np
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score
 
 # Read the CSV file
-df = pd.read_csv('C:/Users/Admin/Desktop/GithubWork/ECG-Analysis/data/annotations/gold_standard.csv')
+df = pd.read_csv('/home/achu/Desktop/Work/Train/filtered_exam.csv')
 
 # Select only the first column as the target variable
 y_true_binary = df.iloc[:, 0].astype(int)
 
 # Load the NPY file
-y_pred_model2 = np.load('C:/Users/Admin/Desktop/GithubWork/ECG-Analysis/output.npy')
+y_pred_model2 = np.load('/home/achu/Desktop/Work/ECG-Analysis/dnn_output.npy')
 
 # Convert the predictions to binary (assuming it contains probabilities)
 threshold = 0.5
