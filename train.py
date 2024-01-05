@@ -82,8 +82,7 @@ def train_model(model_func, model_filename_prefix):
 
     # Save the plots with model name
     plt.savefig(f'./training_plots_{args.model}.png')
-    plt.show()
-
+  
     # Save final result
     model.save(f'{model_filename_prefix}_final.hdf5')
 
