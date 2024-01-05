@@ -15,3 +15,27 @@
    - License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
    - Implementation: First 2 models
 
+### Scripts:
+
+1. **Training Script (`train.py`):**
+   - Run the training script with the following command:
+     ```bash
+     python train.py /path/to/hdf5_file /path/to/csv_file --val_split 0.2 --dataset_name tracings
+     ```
+   - Replace `/path/to/hdf5_file` and `/path/to/csv_file` with the actual paths to your HDF5 file and CSV file. Adjust the `--val_split` value and provide the `--dataset_name` as needed.
+
+2. **Prediction Script (`predict.py`):**
+   - Run the prediction script with the following command:
+     ```bash
+     python predict.py /path/to/hdf5_file /path/to/model_file --dataset_name tracings --output_file ./dnn_output.npy -bs 32
+     ```
+   - Replace `/path/to/hdf5_file` and `/path/to/model_file` with the actual paths to your HDF5 file and model file. Adjust other options such as `--dataset_name`, `--output_file`, and `-bs` as needed.
+
+3. **Figures and Tables Script (`generate_figures_and_tables.py`):**
+   - Run the figures and tables script with the following command:
+     ```bash
+     python generate_figures_and_tables.py /path/to/true_labels.csv /path/to/predicted_labels.npy --threshold 0.6
+     ```
+   - Replace `/path/to/true_labels.csv` and `/path/to/predicted_labels.npy` with the actual paths to your true labels CSV file and predicted labels NPY file. Adjust the threshold using `--threshold`.
+
+
