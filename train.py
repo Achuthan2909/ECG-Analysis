@@ -1,5 +1,6 @@
 # Import necessary libraries and modules
 import argparse
+import matplotlib.pyplot as plt
 from datasets import ECGSequence
 import numpy as np
 from noise_removal import NR
@@ -32,7 +33,7 @@ def train_model(model_func, model_filename_prefix):
     model = model_func()
     
     # Compile the model with specified loss function and optimizer
-    model.compile(loss=loss, optimizer=opt)
+    model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
 
     # Define callbacks for model training
     callbacks = [
@@ -43,7 +44,9 @@ def train_model(model_func, model_filename_prefix):
     # Save the BEST and LAST model during training
     callbacks += [
         ModelCheckpoint(f'{model_filename_prefix}_last.hdf5'),
-        ModelCheckpoint(f'{model_filename_prefix}_best.hdf5', save_best_only=True)
+        ModelCheckpoint(f'{model_filename_prefix}_best.hdf5', save_best_only=True),
+        ReduceLROnPlateau(monitor='val_loss', factor=0.1, patience=5, min_lr=0.00001, verbose=1),
+        EarlyStopping(monitor='val_loss', patience=10, restore_best_weights=True, verbose=1)
     ]
 
     # Train neural network
@@ -55,6 +58,31 @@ def train_model(model_func, model_filename_prefix):
         validation_data=valid_seq,
         verbose=1
     )
+
+    # Plot training and validation accuracy graphs
+    plt.figure(figsize=(12, 6))
+
+    plt.subplot(1, 2, 1)
+    plt.plot(history.history['accuracy'], label='Training Accuracy')
+    plt.plot(history.history['val_accuracy'], label='Validation Accuracy')
+    plt.title('Training and Validation Accuracy over Epochs')
+    plt.xlabel('Epochs')
+    plt.ylabel('Accuracy')
+    plt.legend()
+
+    plt.subplot(1, 2, 2)
+    plt.plot(history.history['loss'], label='Training Loss')
+    plt.plot(history.history['val_loss'], label='Validation Loss')
+    plt.title('Training and Validation Loss over Epochs')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss')
+    plt.legend()
+
+    plt.tight_layout()
+
+    # Save the plots with model name
+    plt.savefig(f'./training_plots_{args.model}.png')
+    plt.show()
 
     # Save final result
     model.save(f'{model_filename_prefix}_final.hdf5')
