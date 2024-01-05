@@ -15,6 +15,10 @@
    - License: [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
    - Implementation: First 2 models
 
+### Dataset:
+
+- The dataset used in this project is available on Zenodo. You can access it [here](https://zenodo.org/records/4916206).
+
 ### Scripts:
 
 1. **Training Script (`train.py`):**
@@ -37,5 +41,3 @@
      python generate_figures_and_tables.py /path/to/true_labels.csv /path/to/predicted_labels.npy --threshold 0.6
      ```
    - Replace `/path/to/true_labels.csv` and `/path/to/predicted_labels.npy` with the actual paths to your true labels CSV file and predicted labels NPY file. Adjust the threshold using `--threshold`.
-
-
